@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.9-slim-buster
 
 LABEL org.opencontainers.image.source https://github.com/RafhaanShah/Reddit-Post-Notifier
 
@@ -9,9 +9,14 @@ USER nonroot
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+# COPY requirements.txt .
+# RUN pip install -r requirements.txt
 
-COPY app.py .
+COPY Pipfile Pipfile.lock /app/
+RUN pipenv 
+# RUN pip install --no-cache-dir pipenv && \
+#     pipenv install --system --deploy --clear
 
-ENTRYPOINT ["python", "app.py"]
+COPY app.py /app/
+
+ENTRYPOINT ["pipenv" "run" "python", "app.py"]
