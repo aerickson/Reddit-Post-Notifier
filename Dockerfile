@@ -5,14 +5,16 @@ LABEL org.opencontainers.image.source https://github.com/aerickson/Reddit-Post-N
 ENV PYTHONUNBUFFERED 1
 
 RUN groupadd -g 10001 -r nonroot && useradd -m --no-log-init -r -g nonroot nonroot
-USER nonroot
 
 WORKDIR /app
 
-COPY app.py Pipfile Pipfile.lock /app/
+RUN pip install --no-cache-dir pipenv
 
-ENV PATH="$PATH:/home/nonroot/.local/bin"
-RUN pip install --no-cache-dir pipenv && \
-    pipenv install --system --deploy --clear 
+COPY app.py /app/
 
-ENTRYPOINT ["pipenv" "run" "python", "app.py"]
+COPY Pipfile Pipfile.lock /tmp/
+RUN cd /tmp && pipenv lock --keep-outdated --requirements > requirements.txt
+RUN pip install -r /tmp/requirements.txt
+
+USER nonroot
+ENTRYPOINT ["python", "app.py"]
