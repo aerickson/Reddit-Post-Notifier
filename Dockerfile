@@ -9,9 +9,10 @@ USER python
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install pipenv
+COPY Pipfile Pipfile.lock /app/
+RUN pipenv install
 
-COPY app.py .
+COPY app.py /app/
 
-ENTRYPOINT ["python", "app.py"]
+ENTRYPOINT ["pipenv" "run" "python", "app.py"]
