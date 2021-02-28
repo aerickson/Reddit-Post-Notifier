@@ -2,3 +2,5 @@
 
 !app.py
 !requirements.txt
+!Pipfile
+!Pipfile.lock
