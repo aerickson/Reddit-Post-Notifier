@@ -4,8 +4,8 @@ LABEL org.opencontainers.image.source https://github.com/RafhaanShah/Reddit-Post
 
 ENV PYTHONUNBUFFERED 1
 
-RUN adduser -D docker
-USER docker
+RUN addgroup -g 10001 -S nonroot && adduser -u 10000 -S -G nonroot -h /home/nonroot nonroot
+USER nonroot
 
 WORKDIR /app
 
