@@ -9,7 +9,7 @@ WORKDIR /app
 
 RUN pip install --no-cache-dir pipenv
 COPY Pipfile Pipfile.lock /tmp/
-RUN cd /tmp && pipenv lock --keep-outdated --requirements > requirements.txt
+RUN cd /tmp && pipenv requirements > requirements.txt
 RUN pip install -r /tmp/requirements.txt
 
 COPY app.py /app/
