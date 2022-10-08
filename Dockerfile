@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster
+FROM python:3.11.0rc2-slim-bullseye
 
 LABEL org.opencontainers.image.source https://github.com/aerickson/Reddit-Post-Notifier
 
