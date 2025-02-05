@@ -68,17 +68,17 @@ def process_submission(submission, subreddits, apprise_client):
     search_terms = subreddits[sub.lower()]
 
     if any(term in title.lower() for term in search_terms):
-        notify(apprise_client, title, submission.id)
+        notify(apprise_client, title, submission.permalink)
         if LOGGING != "FALSE":
             print(datetime.datetime.fromtimestamp(submission.created_utc),
-                  " " + "r/" + sub + ": " + title)
+                  " " + "r/" + sub + ": " + title + "\n" + submission.permalink)
 
 
 def notify(apprise_client, title, submission_id):
     """Send apprise notification."""
     apprise_client.notify(
         title=title,
-        body="https://www.reddit.com/" + submission_id,
+        body="https://www.reddit.com" + submission_id,
     )
 
 
@@ -118,7 +118,7 @@ def check_config_file():
 
 def load_config():
     """Load config into memory."""
-    with open(CONFIG_PATH, "r") as config_yaml:
+    with open(CONFIG_PATH, "r", encoding="utf-8") as config_yaml:
         config = None
 
         try:
@@ -127,7 +127,7 @@ def load_config():
         except yaml.YAMLError as exception:
             if hasattr(exception, "problem_mark"):
                 mark = exception.problem_mark # pylint: disable=no-member
-                print("Invalid yaml, line %s column %s" % (mark.line + 1, mark.column + 1))
+                print(f"Invalid yaml, line {mark.line + 1}, column {mark.column + 1}")
 
             sys.exit("Invalid config: failed to parse yaml")
 
